@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Стоимость владения авто (TCO) — АвтоШтурман</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="styles.css">
+<!-- Подключаем Chart.js для графиков -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+.chart-wrapper { margin-top: 30px; background: rgba(0,0,0,0.2); padding: 20px; border-radius: 12px; }
+.big-number { font-size: 2.5rem; color: var(--accent-neon); font-weight: bold; text-align: center; margin: 10px 0; }
+.label-small { color: var(--text-muted); font-size: 0.9rem; text-align: center; }
+.grid-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+.input-group label { display: block; margin-bottom: 5px; font-size: 0.9rem; color: var(--text-muted); }
+.input-group input { width: 100%; padding: 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); color: #fff; border-radius: 6px; }
+.result-summary { display: flex; justify-content: space-around; margin-top: 20px; flex-wrap: wrap; gap: 10px; }
+.summary-item { text-align: center; }
+.summary-value { font-size: 1.2rem; font-weight: bold; color: #fff; }
+.summary-label { font-size: 0.8rem; color: var(--text-muted); }
+</style>
+</head>
+<body>
+<div class="container">
+<header style="margin-bottom:20px"><a href="index.html" style="color:var(--accent-neon);font-weight:bold;text-decoration:none">← На главную</a></header>
+<h1 class="gold-text">💰 Стоимость владения авто (TCO)</h1>
+<p class="subtitle">Узнай, сколько реально стоит твоя машина в месяц и за один километр.</p>
+
+<div class="calc-wrapper">
+    <div class="grid-inputs">
+        <div class="input-group">
+            <label>Цена автомобиля (₽)</label>
+            <input type="number" id="carPrice" value="1500000">
+        </div>
+        <div class="input-group">
+            <label>Пробег в год (км)</label>
+            <input type="number" id="annualKm" value="15000">
+        </div>
+        <div class="input-group">
+            <label>Расход топлива (л/100км)</label>
+            <input type="number" id="fuelConsumption" value="8" step="0.1">
+        </div>
+        <div class="input-group">
+            <label>Цена бензина (₽/л)</label>
+            <input type="number" id="fuelPrice" value="55">
+        </div>
+        <div class="input-group">
+            <label>ТО и ремонт в год (₽)</label>
+            <input type="number" id="maintenanceCost" value="20000">
+        </div>
+        <div class="input-group">
+            <label>Страховка КАСКО/ОСАГО (₽/год)</label>
+            <input type="number" id="insuranceCost" value="15000">
+        </div>
+        <div class="input-group">
+            <label>Мойка, парковка, шины (₽/год)</label>
+            <input type="number" id="otherCosts" value="10000">
+        </div>
+        <div class="input-group">
+            <label>Потеря стоимости в год (%)</label>
+            <input type="number" id="depreciationRate" value="10" step="0.1">
+        </div>
+    </div>
+
+    <button onclick="calculateTCO()" class="btn-link" style="width:100%; margin-top:20px;">Рассчитать расходы</button>
+
+    <!-- Результаты -->
+    <div id="resultArea" class="result-box show" style="display:none;">
+        <div class="big-number" id="monthlyTotal">0 ₽/мес</div>
+        <div class="label-small">Средние ежемесячные расходы на автомобиль</div>
+        
+        <div class="result-summary">
+            <div class="summary-item">
+                <div class="summary-value" id="costPerKm">0 ₽</div>
+                <div class="summary-label">За 1 км пути</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-value" id="yearlyTotal">0 ₽</div>
+                <div class="summary-label">Всего за год</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-value" id="fuelShare">0%</div>
+                <div class="summary-label">Доля топлива</div>
+            </div>
+        </div>
+
+        <div class="chart-wrapper">
+            <canvas id="tcoChart"></canvas>
+        </div>
+        <div class="ti" style="margin-top:15px; font-size:0.9rem; color:var(--text-muted); text-align:center;">
+            💡 Совет: Если доля потерь от амортизации превышает 40%, возможно, пора продавать авто или брать более ликвидную модель.
+        </div>
+    </div>
+</div>
+
+<footer>© 2026 АвтоШтурман · Все расчеты справочные. Безопасной дороги!</footer>
+</div>
+
+<script>
+let myChart = null;
+
+function calculateTCO() {
+    // Получаем данные из полей
+    const carPrice = parseFloat(document.getElementById('carPrice').value) || 0;
+    const annualKm = parseFloat(document.getElementById('annualKm').value) || 0;
+    const fuelCons = parseFloat(document.getElementById('fuelConsumption').value) || 0;
+    const fuelPrice = parseFloat(document.getElementById('fuelPrice').value) || 0;
+    const maintenance = parseFloat(document.getElementById('maintenanceCost').value) || 0;
+    const insurance = parseFloat(document.getElementById('insuranceCost').value) || 0;
+    const other = parseFloat(document.getElementById('otherCosts').value) || 0;
+    const depreciationRate = parseFloat(document.getElementById('depreciationRate').value) || 0;
+
+    if (carPrice === 0 || annualKm === 0) return alert("Введите цену авто и пробег");
+
+    // 1. Расчет годовых затрат
+    const fuelYearly = (annualKm / 100) * fuelCons * fuelPrice;
+    const depreciationYearly = carPrice * (depreciationRate / 100);
+    
+    const totalYearly = fuelYearly + maintenance + insurance + other + depreciationYearly;
+    const monthlyAvg = totalYearly / 12;
+    const costPerKm = annualKm > 0 ? totalYearly / annualKm : 0;
+    const fuelPercentage = totalYearly > 0 ? Math.round((fuelYearly / totalYearly) * 100) : 0;
+
+    // Обновляем интерфейс
+    document.getElementById('resultArea').style.display = 'block';
+    document.getElementById('monthlyTotal').innerText = formatMoney(monthlyAvg) + " ₽/мес";
+    document.getElementById('costPerKm').innerText = costPerKm.toFixed(2) + " ₽";
+    document.getElementById('yearlyTotal').innerText = formatMoney(totalYearly) + " ₽";
+    document.getElementById('fuelShare').innerText = fuelPercentage + "%";
+
+    // Строим график
+    renderChart(fuelYearly, maintenance, insurance, other, depreciationYearly);
+}
+
+function formatMoney(num) {
+    return num.toLocaleString('ru-RU', { maximumFractionDigits: 0 });
+}
+
+function renderChart(fuel, maint, ins, other, depr) {
+    const ctx = document.getElementById('tcoChart').getContext('2d');
+    
+    // Удаляем старый график, если он есть
+    if (myChart) {
+        myChart.destroy();
+    }
+
+    myChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Топливо', 'ТО и Ремонт', 'Страховка', 'Прочее (мойка/шины)', 'Амортизация'],
+            datasets: [{
+                data: [fuel, maint, ins, other, depr],
+                backgroundColor: [
+                    '#00E5FF', // Cyan for Fuel
+                    '#FFD700', // Gold for Maintenance
+                    '#81B29A', // Green for Insurance
+                    '#94A3B8', // Gray for Other
+                    '#FF4D4D'  // Red for Depreciation
+                ],
+                borderWidth: 1,
+                borderColor: '#1A1D24'
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'bottom', labels: { color: '#E2E8F0' } },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.label || '';
+                            if (label) { label += ': '; }
+                            if (context.parsed !== null) {
+                                label += new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB' }).format(context.parsed);
+                            }
+                            return label;
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+</script>
+</body>
+</html>
