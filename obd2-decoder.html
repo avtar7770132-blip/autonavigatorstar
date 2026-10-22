@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Декодер ошибок OBD2 — АвтоШтурман</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="styles.css">
+<style>
+.error-result { background: rgba(255, 77, 77, 0.1); border-left: 4px solid #FF4D4D; padding: 20px; margin-top: 20px; display: none; }
+.severity-high { color: #FF4D4D; font-weight: bold; }
+.severity-medium { color: #FFA500; font-weight: bold; }
+.severity-low { color: #00E5FF; font-weight: bold; }
+.parts-list { list-style: none; padding: 0; margin: 15px 0; }
+.parts-list li { padding: 8px 0; border-bottom: 1px dashed var(--border-glass); display: flex; justify-content: space-between; align-items: center; }
+.buy-btn { background: transparent; border: 1px solid var(--accent-neon); color: var(--accent-neon); padding: 5px 10px; border-radius: 4px; text-decoration: none; font-size: 0.8rem; transition: 0.3s; }
+.buy-btn:hover { background: var(--accent-neon); color: #000; }
+</style>
+</head>
+<body>
+<div class="container">
+<header style="margin-bottom:20px"><a href="index.html" style="color:var(--accent-neon);font-weight:bold;text-decoration:none">← На главную</a></header>
+<h1 class="gold-text">⚠️ Декодер ошибок OBD2</h1>
+<p class="subtitle">Что значит Check Engine? Узнай причину поломки без визита в сервис.</p>
+
+<!-- КАРТИНКА -->
+<img src="obd2.jpg" alt="Диагностический сканер в разъеме авто" style="width:100%; height:250px; object-fit:cover; border-radius:16px; margin-bottom:30px;">
+
+<div class="calc-wrapper">
+    <div class="form-group">
+        <label for="errorCode">Введите код ошибки (например, P0300):</label>
+        <input type="text" id="errorCode" placeholder="P0xxx / C0xxx / B0xxx" style="text-transform: uppercase;">
+    </div>
+    
+    <button onclick="decodeError()" class="btn-link" style="width:100%">Расшифровать код</button>
+
+    <div id="errorResult" class="error-result"></div>
+</div>
+
+<footer>© 2026 АвтоШтурман · Все расчеты справочные. Безопасной дороги!</footer>
+</div>
+
+<script>
+// Мини-база данных популярных ошибок
+const ERRORS_DB = {
+    "P0300": { desc: "Случайные пропуски зажигания", severity: "high", causes: ["Изношенные свечи", "Неисправная катушка", "Забитые форсунки"], parts: ["Свечи зажигания", "Катушки"] },
+    "P0420": { desc: "Низкая эффективность катализатора (Банк 1)", severity: "medium", causes: ["Убитый катализатор", "Лямбда-зонд", "Подсос воздуха"], parts: ["Катализатор", "Датчик кислорода"] },
+    "P0171": { desc: "Система слишком бедная (Банк 1)", severity: "medium", causes: ["Подсос воздуха во впуск", "Грязный расходомер (MAF)", "Топливный насос"], parts: ["Герметик для поиска утечек", "Очиститель карбюратора/MAF"] },
+    "P0128": { desc: "Термостат ниже температуры переключения", severity: "low", causes: ["Застрявший термостат в открытом положении"], parts: ["Термостат"] },
+    "P0500": { desc: "Отсутствие сигнала датчика скорости", severity: "low", causes: ["Обрыв проводки", "Неисправен сам датчик ABS/VSS"], parts: ["Датчик скорости"] }
+};
+
+function decodeError() {
+    const code = document.getElementById('errorCode').value.trim().toUpperCase();
+    const resultDiv = document.getElementById('errorResult');
+    
+    if (!code) return alert("Введите код ошибки");
+
+    // Поиск в базе
+    let data = ERRORS_DB[code];
+    
+    // Если нет точного совпадения, даем общую информацию по классу
+    if (!data) {
+        if (code.startsWith("P")) {
+            data = { desc: "Ошибка трансмиссии или двигателя (Powertrain)", severity: "unknown", causes: ["Требуется полная диагностика сканером"], parts: [] };
+        } else {
+             data = { desc: "Ошибка кузова, шасси или сети (Chassis/Body)", severity: "unknown", causes: ["Проверьте блоки управления"], parts: [] };
+        }
+    }
+
+    // Формируем HTML ответа
+    let sevClass = "";
+    let sevText = "";
+    if(data.severity === 'high') { sevClass = 'severity-high'; sevText = '🔴 СРОЧНО РЕШИТЬ'; }
+    else if(data.severity === 'medium') { sevClass = 'severity-medium'; sevText = '🟡 ПЛАНИРУЙТЕ РЕМОНТ'; }
+    else if(data.severity === 'low') { sevClass = 'severity-low'; sevText = '🔵 МОЖНО ЕХАТЬ ДО СЕРВИСА'; }
+    else { sevText = 'ℹ️ НЕИЗВЕСТНЫЙ СТАТУС'; }
+
+    let html = `<h3 style="margin-top:0; color:#fff;">${code}: ${data.desc}</h3>`;
+    html += `<div style="${sevClass}">${sevText}</div>`;
+    html += `<p><strong>Вероятные причины:</strong></p><ul>`;
+    data.causes.forEach(c => html += `<li>${c}</li>`);
+    html += `</ul>`;
+
+    if (data.parts.length > 0) {
+        html += `<p><strong>Что может потребоваться заменить:</strong></p><ul class="parts-list">`;
+        data.parts.forEach(p => {
+            html += `<li><span>${p}</span> <a href="#" class="buy-btn" target="_blank">Купить запчасть →</a></li>`; // Сюда потом вставим партнерскую ссылку Exist/Ozon
+        });
+        html += `</ul>`;
+    }
+
+    resultDiv.innerHTML = html;
+    resultDiv.style.display = 'block';
+}
+</script>
+</body>
+</html>
