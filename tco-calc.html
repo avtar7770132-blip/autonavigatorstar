@@ -6,10 +6,25 @@
 <title>Стоимость владения авто (TCO) — АвтоШтурман</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="stylesheet" href="styles.css">
-<!-- Подключаем Chart.js для графиков -->
+<!-- Подключаем Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-.chart-wrapper { margin-top: 30px; background: rgba(0,0,0,0.2); padding: 20px; border-radius: 12px; }
+/* Стили для блока с картинкой */
+.article-hero-img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 16px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+.chart-wrapper { 
+    margin-top: 30px; 
+    background: rgba(0,0,0,0.2); 
+    padding: 20px; 
+    border-radius: 12px; 
+    border: 1px solid var(--border-glass);
+}
 .big-number { font-size: 2.5rem; color: var(--accent-neon); font-weight: bold; text-align: center; margin: 10px 0; }
 .label-small { color: var(--text-muted); font-size: 0.9rem; text-align: center; }
 .grid-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
@@ -26,6 +41,9 @@
 <header style="margin-bottom:20px"><a href="index.html" style="color:var(--accent-neon);font-weight:bold;text-decoration:none">← На главную</a></header>
 <h1 class="gold-text">💰 Стоимость владения авто (TCO)</h1>
 <p class="subtitle">Узнай, сколько реально стоит твоя машина в месяц и за один километр.</p>
+
+<!-- КАРТИНКА ДЛЯ КОНТЕКСТА -->
+<img src="hero-auto.jpg" alt="Автомобиль на ночной дороге" class="article-hero-img">
 
 <div class="calc-wrapper">
     <div class="grid-inputs">
@@ -85,11 +103,12 @@
             </div>
         </div>
 
+        <!-- ГРАФИК ЛИНЕЙНЫЙ -->
         <div class="chart-wrapper">
             <canvas id="tcoChart"></canvas>
         </div>
         <div class="ti" style="margin-top:15px; font-size:0.9rem; color:var(--text-muted); text-align:center;">
-            💡 Совет: Если доля потерь от амортизации превышает 40%, возможно, пора продавать авто или брать более ликвидную модель.
+            💡 Совет: Линия показывает структуру ваших годовых затрат. Если сектор "Амортизация" слишком велик, рассмотрите продажу авто до начала резкого падения цены.
         </div>
     </div>
 </div>
@@ -129,15 +148,15 @@ function calculateTCO() {
     document.getElementById('yearlyTotal').innerText = formatMoney(totalYearly) + " ₽";
     document.getElementById('fuelShare').innerText = fuelPercentage + "%";
 
-    // Строим график
-    renderChart(fuelYearly, maintenance, insurance, other, depreciationYearly);
+    // Строим новый тип графика
+    renderLineChart(fuelYearly, maintenance, insurance, other, depreciationYearly);
 }
 
 function formatMoney(num) {
     return num.toLocaleString('ru-RU', { maximumFractionDigits: 0 });
 }
 
-function renderChart(fuel, maint, ins, other, depr) {
+function renderLineChart(fuel, maint, ins, other, depr) {
     const ctx = document.getElementById('tcoChart').getContext('2d');
     
     // Удаляем старый график, если он есть
@@ -145,38 +164,67 @@ function renderChart(fuel, maint, ins, other, depr) {
         myChart.destroy();
     }
 
+    // Данные для оси X (категории) и Y (значения)
+    const labels = ['Топливо', 'ТО/Ремонт', 'Страховка', 'Прочее', 'Амортизация'];
+    const dataValues = [fuel, maint, ins, other, depr];
+
     myChart = new Chart(ctx, {
-        type: 'doughnut',
+        type: 'line',
         data: {
-            labels: ['Топливо', 'ТО и Ремонт', 'Страховка', 'Прочее (мойка/шины)', 'Амортизация'],
+            labels: labels,
             datasets: [{
-                data: [fuel, maint, ins, other, depr],
-                backgroundColor: [
-                    '#00E5FF', // Cyan for Fuel
-                    '#FFD700', // Gold for Maintenance
-                    '#81B29A', // Green for Insurance
-                    '#94A3B8', // Gray for Other
-                    '#FF4D4D'  // Red for Depreciation
-                ],
-                borderWidth: 1,
-                borderColor: '#1A1D24'
+                label: 'Годовые расходы (₽)',
+                data: dataValues,
+                borderColor: '#00E5FF', // Неоновый голубой
+                backgroundColor: 'rgba(0, 229, 255, 0.1)', // Прозрачная заливка под линией
+                borderWidth: 3,
+                pointBackgroundColor: '#FFD700', // Золотые точки
+                pointBorderColor: '#1A1D24',
+                pointRadius: 6,
+                pointHoverRadius: 8,
+                fill: true,
+                tension: 0.4 // Плавность линии
             }]
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: {
-                legend: { position: 'bottom', labels: { color: '#E2E8F0' } },
+                legend: { display: false }, // Легенда не нужна, так как подписи на оси X
                 tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                    backgroundColor: 'rgba(30, 34, 45, 0.9)',
+                    titleColor: '#fff',
+                    bodyColor: '#00E5FF',
+                    borderColor: '#00E5FF',
+                    borderWidth: 1,
                     callbacks: {
                         label: function(context) {
-                            let label = context.label || '';
+                            let label = context.dataset.label || '';
                             if (label) { label += ': '; }
-                            if (context.parsed !== null) {
-                                label += new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB' }).format(context.parsed);
+                            if (context.parsed.y !== null) {
+                                label += new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB' }).format(context.parsed.y);
                             }
                             return label;
                         }
                     }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: { color: 'rgba(255,255,255,0.05)' },
+                    ticks: { 
+                        color: '#94A3B8',
+                        callback: function(value) {
+                            return value / 1000 + 'k ₽'; // Укорачиваем числа для красоты
+                        }
+                    }
+                },
+                x: {
+                    grid: { display: false },
+                    ticks: { color: '#E2E8F0', font: { weight: 'bold' } }
                 }
             }
         }
