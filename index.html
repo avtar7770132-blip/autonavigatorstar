@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>АвтоШтурман · Умный помощник автовладельца</title>
+<link rel="stylesheet" href="styles.css">
+<!-- Подключаем Chart.js для графиков -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="container">
+
+<!-- ГЛАВНЫЙ БАННЕР С ФОТО -->
+<div class="hero-section">
+    <img src="hero-auto.jpg" alt="АвтоШтурман - премиальный помощник для авто" class="hero-img">
+    <div class="hero-text-overlay">
+        <h2>🚗 АвтоШтурман</h2>
+        <p>Считай расходы. Чини с умом. Экономь на сервисе.</p>
+    </div>
+</div>
+
+<header>
+<h1>Твои автомобильные инструменты</h1>
+<p class="subtitle">Бесплатные калькуляторы стоимости владения, диагностики ошибок, износа деталей и окупаемости ГБО. Премиум-аналитика для твоего авто.</p>
+</header>
+
+<div class="filters">
+<button onclick="filterCards('all')" class="filter-btn active" id="btn-all">Все</button>
+<button onclick="filterCards('calc')" class="filter-btn" id="btn-calc">🧮 Калькуляторы</button>
+<button onclick="filterCards('tool')" class="filter-btn" id="btn-tool">🔧 Диагностика</button>
+<button onclick="filterCards('blog')" class="filter-btn" id="btn-blog">📚 Экспертные статьи</button>
+</div>
+
+<div class="grid-container">
+<!-- Карточки будут добавлены следующим шагом -->
+<div class="card fade-in-up" data-category="calc">
+    <div class="card-icon">💰</div>
+    <div class="card-title">Стоимость владения (TCO)</div>
+    <div class="card-desc">Узнай реальную цену твоего авто в месяц. Бензин, ТО, страховка, амортизация — всё в одном графике.</div>
+    <span class="btn-link">Рассчитать →</span>
+</div>
+<div class="card fade-in-up" data-category="tool">
+    <div class="card-icon">⚠️</div>
+    <div class="card-title">Декодер ошибок OBD2</div>
+    <div class="card-desc">Горит Check Engine? Введи код ошибки и узнай причину, последствия и можно ли ехать дальше.</div>
+    <span class="btn-link">Диагностировать →</span>
+</div>
+<div class="card fade-in-up" data-category="calc">
+    <div class="card-icon">🛑</div>
+    <div class="card-title">Износ тормозных колодок</div>
+    <div class="card-desc">Прогноз остаточного ресурса в км и дата замены. Не дай сервису обмануть тебя на преждевременной замене.</div>
+    <span class="btn-link">Проверить износ →</span>
+</div>
+</div>
+
+<footer>© 2026 АвтоШтурман · Все расчеты справочные. Безопасной дороги!</footer>
+</div>
+
+<script>
+function filterCards(category){
+const cards=document.querySelectorAll('.card');
+const buttons=document.querySelectorAll('.filter-btn');
+buttons.forEach(b=>{b.classList.remove('active');if(b.id==='btn-'+category)b.classList.add('active');});
+cards.forEach(c=>{
+if(category==='all'||c.dataset.category===category){c.style.display='flex';c.style.animation='none';c.offsetHeight;c.style.animation=null;}
+else{c.style.display='none';}
+});
+}
+</script>
+</body>
+</html>
