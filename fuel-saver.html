@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Экономия топлива — АвтоШтурман</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="styles.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="container">
+<header style="margin-bottom:20px"><a href="index.html" style="color:var(--accent-neon);font-weight:bold;text-decoration:none">← На главную</a></header>
+<h1 class="gold-text">⛽ Калькулятор экономии топлива</h1>
+<p class="subtitle">Сколько денег вы теряете на агрессивной езде?</p>
+<img src="fuel-save.jpg" alt="Топливная горловина" style="width:100%; height:250px; object-fit:cover; border-radius:16px; margin-bottom:30px;">
+
+<div class="calc-wrapper">
+    <div class="grid-inputs">
+        <div class="input-group">
+            <label>Пробег в месяц (км)</label>
+            <input type="number" id="kmMonth" value="1000">
+        </div>
+        <div class="input-group">
+            <label>Цена бензина (₽/л)</label>
+            <input type="number" id="priceFuel" value="55">
+        </div>
+        <div class="input-group">
+            <label>Расход спокойный (л/100км)</label>
+            <input type="number" id="consCalm" value="8">
+        </div>
+        <div class="input-group">
+            <label>Расход агрессивный (л/100км)</label>
+            <input type="number" id="consAggr" value="11">
+        </div>
+    </div>
+    <button onclick="calcSavings()" class="btn-link" style="width:100%; margin-top:20px;">Рассчитать переплату</button>
+    
+    <div id="saveRes" class="result-box show" style="display:none;">
+        <div class="big-number" id="overpayMonthly">0 ₽/мес</div>
+        <div style="text-align:center; color:var(--text-muted);">Лишние расходы при агрессивной езде</div>
+        <div class="chart-wrapper" style="height:200px; margin-top:20px;">
+            <canvas id="saveChart"></canvas>
+        </div>
+    </div>
+</div>
+<footer>© 2026 АвтоШтурман</footer>
+</div>
+<script>
+let saveChartInst = null;
+function calcSavings() {
+    const km = parseFloat(document.getElementById('kmMonth').value);
+    const price = parseFloat(document.getElementById('priceFuel').value);
+    const c1 = parseFloat(document.getElementById('consCalm').value);
+    const c2 = parseFloat(document.getElementById('consAggr').value);
+
+    const costCalm = (km / 100) * c1 * price;
+    const costAggr = (km / 100) * c2 * price;
+    const diff = costAggr - costCalm;
+
+    document.getElementById('saveRes').style.display = 'block';
+    document.getElementById('overpayMonthly').innerText = Math.round(diff).toLocaleString('ru-RU') + " ₽/мес";
+    document.getElementById('overpayMonthly').style.color = "#FF4D4D";
+
+    // График сравнения
+    const ctx = document.getElementById('saveChart').getContext('2d');
+    if(saveChartInst) saveChartInst.destroy();
+    
+    saveChartInst = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Спокойный стиль', 'Агрессивный стиль'],
+            datasets: [{
+                label: 'Расходы в месяц (₽)',
+                data: [costCalm, costAggr],
+                backgroundColor: ['#00FF9D', '#FF4D4D']
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { y: { ticks: { color: '#fff' } }, x: { ticks: { color: '#fff' } } }
+        }
+    });
+}
+</script>
+</body>
+</html>
