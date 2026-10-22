@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Износ тормозных колодок — АвтоШтурман</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="styles.css">
+<style>
+.brake-status-bar { height: 30px; background: #333; border-radius: 15px; overflow: hidden; position: relative; margin: 20px 0; }
+.brake-fill { height: 100%; width: 0%; transition: width 1s ease-out; }
+.status-green { background: linear-gradient(90deg, #00FF9D, #00E5FF); }
+.status-yellow { background: linear-gradient(90deg, #FFD700, #FFA500); }
+.status-red { background: linear-gradient(90deg, #FF4D4D, #C92A2A); }
+.predicted-km { font-size: 2rem; font-weight: bold; text-align: center; color: var(--accent-neon); margin: 10px 0; }
+.warning-msg { text-align: center; font-weight: bold; margin-top: 10px; }
+</style>
+</head>
+<body>
+<div class="container">
+<header style="margin-bottom:20px"><a href="index.html" style="color:var(--accent-neon);font-weight:bold;text-decoration:none">← На главную</a></header>
+<h1 class="gold-text">🛑 Износ тормозных колодок</h1>
+<p class="subtitle">Когда менять? Точный прогноз остатка ресурса в километрах.</p>
+
+<!-- КАРТИНКА -->
+<img src="brakes.jpg" alt="Тормозной диск крупным планом" style="width:100%; height:250px; object-fit:cover; border-radius:16px; margin-bottom:30px;">
+
+<div class="calc-wrapper">
+    <div class="grid-inputs">
+        <div class="input-group">
+            <label>Новая толщина колодки (мм)</label>
+            <input type="number" id="newThickness" value="10" step="0.5">
+        </div>
+        <div class="input-group">
+            <label>Текущая толщина (мм)</label>
+            <input type="number" id="currentThickness" value="5" step="0.5">
+        </div>
+        <div class="input-group">
+            <label>Минимально допустимая толщина (обычно 3 мм)</label>
+            <input type="number" id="minThickness" value="3" step="0.5">
+        </div>
+        <div class="input-group">
+            <label>Пробег с момента замены (км)</label>
+            <input type="number" id="kmDriven" value="20000">
+        </div>
+        <div class="input-group">
+            <label>Тип вождения</label>
+            <select id="drivingStyle">
+                <option value="calm">Спокойное (город/трасса)</option>
+                <option value="normal">Среднее (смешанный цикл)</option>
+                <option value="aggressive">Агрессивное (частые разгоны/торможения)</option>
+            </select>
+        </div>
+    </div>
+
+    <button onclick="calculateBrakes()" class="btn-link" style="width:100%; margin-top:20px;">Рассчитать остаток</button>
+
+    <div id="brakeResult" class="result-box show" style="display:none;">
+        <div class="predicted-km" id="remainingKm">0 км</div>
+        <div style="text-align:center; color:var(--text-muted);">До критического износа</div>
+        
+        <div class="brake-status-bar">
+            <div id="barFill" class="brake-fill status-green"></div>
+        </div>
+        
+        <div id="warningMsg" class="warning-msg"></div>
+        
+        <div class="ti" style="margin-top:20px; font-size:0.9rem; color:var(--text-muted); text-align:center;">
+            💡 Совет: Если осталось менее 2000 км, закажите колодки заранее. Экономия на качестве здесь недопустима.
+        </div>
+    </div>
+</div>
+
+<footer>© 2026 АвтоШтурман · Все расчеты справочные. Безопасной дороги!</footer>
+</div>
+
+<script>
+function calculateBrakes() {
+    const newT = parseFloat(document.getElementById('newThickness').value);
+    const curT = parseFloat(document.getElementById('currentThickness').value);
+    const minT = parseFloat(document.getElementById('minThickness').value);
+    const kmDriven = parseFloat(document.getElementById('kmDriven').value);
+    const style = document.getElementById('drivingStyle').value;
+
+    if (curT <= minT) {
+        alert("Колодки уже достигли минимума! Менять срочно.");
+        return;
+    }
+
+    // Расчет процента износа
+    const totalWearRange = newT - minT;
+    const wornAmount = newT - curT;
+    const wearPercent = (wornAmount / totalWearRange) * 100;
+
+    // Корректировка стиля вождения (коэффициент выносливости)
+    // Спокойное изнашивает медленнее, агрессивное быстрее
+    let lifeMultiplier = 1.0;
+    if(style === 'calm') lifeMultiplier = 1.2;
+    if(style === 'aggressive') lifeMultiplier = 0.7;
+
+    // Примерный пробег полного комплекта (стандарт ~40-60 тыс. км, берем среднее 50к как базу)
+    const baseLifeKm = 50000 * lifeMultiplier;
+    
+    // Сколько км пройдено условно относительно износа
+    const effectiveKmDriven = kmDriven / lifeMultiplier; 
+    
+    // Остаток процентов
+    const remainingPercent = 100 - wearPercent;
+    
+    // Прогноз остатка в км
+    const predictedRemainingKm = Math.round((baseLifeKm * (remainingPercent / 100)));
+
+    // Обновление UI
+    document.getElementById('brakeResult').style.display = 'block';
+    document.getElementById('remainingKm').innerText = predictedRemainingKm.toLocaleString('ru-RU') + " км";
+    
+    const bar = document.getElementById('barFill');
+    const msg = document.getElementById('warningMsg');
+    
+    bar.style.width = remainingPercent + "%";
+    
+    if (remainingPercent > 50) {
+        bar.className = "brake-fill status-green";
+        msg.innerText = "✅ Состояние отличное.";
+        msg.style.color = "#00FF9D";
+    } else if (remainingPercent > 20) {
+        bar.className = "brake-fill status-yellow";
+        msg.innerText = "⚠️ Средний износ. Планируйте замену.";
+        msg.style.color = "#FFD700";
+    } else {
+        bar.className = "brake-fill status-red";
+        msg.innerText = "🛑 КРИТИЧЕСКИЙ ИЗНОС! Меняйте немедленно.";
+        msg.style.color = "#FF4D4D";
+    }
+}
+</script>
+</body>
+</html>
