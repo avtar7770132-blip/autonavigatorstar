@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Подбор масла — АвтоШтурман</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="styles.css">
+<style>.result-oil { background: rgba(0, 229, 255, 0.1); border-left: 4px solid #00E5FF; padding: 20px; margin-top: 20px; display:none; }</style>
+</head>
+<body>
+<div class="container">
+<header style="margin-bottom:20px"><a href="index.html" style="color:var(--accent-neon);font-weight:bold;text-decoration:none">← На главную</a></header>
+<h1 class="gold-text">🛢️ Подбор моторного масла</h1>
+<p class="subtitle">Узнайте точные допуски производителя для вашего двигателя.</p>
+<img src="oil.jpg" alt="Моторное масло" style="width:100%; height:250px; object-fit:cover; border-radius:16px; margin-bottom:30px;">
+
+<div class="calc-wrapper">
+    <div class="form-group">
+        <label>Марка автомобиля</label>
+        <select id="carBrand" onchange="loadModels()">
+            <option value="">Выберите марку...</option>
+            <option value="toyota">Toyota</option>
+            <option value="kia">Kia</option>
+            <option value="vw">Volkswagen</option>
+            <option value="bmw">BMW</option>
+            <option value="lada">LADA (ВАЗ)</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Модель / Двигатель</label>
+        <input type="text" id="carModel" placeholder="Например: Camry 2.5 / Rio X-Line">
+    </div>
+    <button onclick="findOil()" class="btn-link" style="width:100%">Найти допуск</button>
+
+    <div id="oilResult" class="result-oil"></div>
+</div>
+<footer>© 2026 АвтоШтурман</footer>
+</div>
+<script>
+function findOil() {
+    const brand = document.getElementById('carBrand').value;
+    const model = document.getElementById('carModel').value.toLowerCase();
+    const resDiv = document.getElementById('oilResult');
+    
+    if(!brand || !model) return alert("Заполните поля");
+
+    let recommendation = "";
+    // Упрощенная логика для примера
+    if(brand === 'toyota') recommendation = "API SN/SP, ILSAC GF-5/GF-6. Вязкость 0W-20 или 5W-30.";
+    else if(brand === 'kia' || brand === 'hyundai') recommendation = "API SM/SN. Вязкость 5W-20 или 5W-30.";
+    else if(brand === 'vw') recommendation = "VW 502 00 / VW 505 01. Вязкость 0W-30 или 5W-30.";
+    else if(brand === 'bmw') recommendation = "BMW Longlife-01 / LL-04. Вязкость 0W-30 или 5W-40.";
+    else if(brand === 'lada') recommendation = "API SL/SM. Вязкость 5W-30 или 10W-40.";
+    else recommendation = "Общее правило: смотрите наклейку под капотом или руководство по эксплуатации.";
+
+    resDiv.innerHTML = `<h3>Рекомендация для ${brand.toUpperCase()} ${model}</h3><p><strong>Допуск:</strong> ${recommendation}</p><p><em>💡 Совет: Всегда меняйте масляный фильтр вместе с маслом.</em></p>`;
+    resDiv.style.display = 'block';
+}
+</script>
+</body>
+</html>
