@@ -13,17 +13,15 @@
 <header style="margin-bottom:20px"><a href="index.html" style="color:var(--accent-neon);font-weight:bold;text-decoration:none">← На главную</a></header>
 <h1 class="gold-text">🛞 Проверка индекса нагрузки шин</h1>
 <p class="subtitle">Безопасность превыше всего. Хватит ли прочности ваших покрышек?</p>
-<img src="tires.jpg" alt="Протектор шины" style="width:100%; height:250px; object-fit:cover; border-radius:16px; margin-bottom:30px;">
+
+<!-- КАРТИНКА tires.jpg -->
+<img src="tires.jpg" alt="Протектор шины" onerror="this.src='https://via.placeholder.com/800x250/1A1D24/00E5FF?text=No+Image'" style="width:100%; height:250px; object-fit:cover; border-radius:16px; margin-bottom:30px;">
 
 <div class="calc-wrapper">
     <div class="grid-inputs">
         <div class="input-group">
             <label>Снаряженная масса авто (кг)</label>
             <input type="number" id="carWeight" value="1500">
-        </div>
-        <div class="input-group">
-            <label>Макс. нагрузка на ось (перед/зад) (кг)</label>
-            <input type="number" id="axleLoad" value="800">
         </div>
         <div class="input-group">
             <label>Индекс нагрузки шины (цифра после размера, напр. 91)</label>
@@ -36,31 +34,27 @@
 <footer>© 2026 АвтоШтурман</footer>
 </div>
 <script>
-// Таблица индексов нагрузки (упрощенная)
 const LOAD_TABLE = { 80:450, 85:515, 90:600, 91:615, 92:630, 94:670, 95:690, 98:750, 100:800 };
 
 function checkTire() {
     const weight = parseFloat(document.getElementById('carWeight').value);
-    const axleMax = parseFloat(document.getElementById('axleLoad').value);
     const idx = parseInt(document.getElementById('tireIndex').value);
     
-    const tireCapacity = LOAD_TABLE[idx] || (idx * 10 - 200); // Приближенная формула если нет в таблице
-    
-    // Расчет на одну шину (вес распределяется примерно равномерно, но лучше брать запас)
+    const tireCapacity = LOAD_TABLE[idx] || (idx * 10 - 200); 
     const loadPerTire = weight / 4;
     
     let msg = "";
     let cls = "";
     
-    if (tireCapacity >= loadPerTire && tireCapacity >= axleMax/2) {
+    if (tireCapacity >= loadPerTire) {
         msg = `✅ БЕЗОПАСНО. Шина выдерживает ${tireCapacity} кг. Нагрузка на колесо ~${Math.round(loadPerTire)} кг.`;
         cls = "status-safe";
     } else {
-        msg = `⚠️ ОПАСНО! Шина (${tireCapacity} кг) слабее расчетной нагрузки (${Math.round(loadPerTire)} кг). Возможна деформация или взрыв при перегрузке.`;
+        msg = `⚠️ ОПАСНО! Шина (${tireCapacity} кг) слабее расчетной нагрузки (${Math.round(loadPerTire)} кг).`;
         cls = "status-danger";
     }
     
-    document.getElementById('tireRes').innerHTML = `<h3 class="${cls}">${msg}</h3><p><small>Примечание: Этот калькулятор дает ориентировочную оценку. Сверяйтесь с мануалом авто.</small></p>`;
+    document.getElementById('tireRes').innerHTML = `<h3 class="${cls}">${msg}</h3>`;
     document.getElementById('tireRes').style.display = 'block';
 }
 </script>
