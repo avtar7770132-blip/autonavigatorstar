@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Калькулятор штрафов — АвтоШтурман</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="container">
+<header style="margin-bottom:20px"><a href="index.html" style="color:var(--accent-neon);font-weight:bold;text-decoration:none">← На главную</a></header>
+<h1 class="gold-text">👮 Калькулятор стоимости нарушений</h1>
+<p class="subtitle">Сколько реально обойдется «парковка в неположенном месте» с учетом эвакуации?</p>
+<img src="fines.jpg" alt="ГИБДД ночью" style="width:100%; height:250px; object-fit:cover; border-radius:16px; margin-bottom:30px;">
+
+<div class="calc-wrapper">
+    <div class="form-group">
+        <label>Тип нарушения</label>
+        <select id="violationType">
+            <option value="parking">Парковка в запретной зоне (штраф 1000₽ + эвакуация)</option>
+            <option value="speed">Превышение скорости >40км/ч (штраф 1000-2500₽)</option>
+            <option value="red">Проезд на красный (штраф 1000₽ или лишение)</option>
+            <option value="alcohol">Вождение в нетрезвом виде (штраф 30000₽ + лишение)</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Регион (для расчета эвакуации)</label>
+        <select id="region">
+            <option value="msk">Москва (эвакуатор ~5000₽, хранение 1000₽/сутки)</option>
+            <option value="spb">Санкт-Петербург (эвакуатор ~4000₽, хранение 800₽/сутки)</option>
+            <option value="reg">Другой регион (эвакуатор ~3000₽, хранение 500₽/сутки)</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Сутки хранения на штрафстоянке</label>
+        <input type="number" id="daysStored" value="1" min="1">
+    </div>
+    <button onclick="calcFine()" class="btn-link" style="width:100%">Рассчитать убытки</button>
+    <div id="fineRes" class="result-box show" style="display:none;"></div>
+</div>
+<footer>© 2026 АвтоШтурман</footer>
+</div>
+<script>
+function calcFine() {
+    const type = document.getElementById('violationType').value;
+    const region = document.getElementById('region').value;
+    const days = parseInt(document.getElementById('daysStored').value);
+    
+    let fineBase = 0;
+    let towCost = 0;
+    let storageRate = 0;
+
+    // Базовые ставки (примерные для РФ 2026)
+    if(type === 'parking') fineBase = 1000;
+    else if(type === 'speed') fineBase = 1500;
+    else if(type === 'red') fineBase = 1000;
+    else if(type === 'alcohol') fineBase = 30000;
+
+    if(region === 'msk') { towCost = 5000; storageRate = 1000; }
+    else if(region === 'spb') { towCost = 4000; storageRate = 800; }
+    else { towCost = 3000; storageRate = 500; }
+
+    // Эвакуация только для парковки/запрета остановки
+    if(type !== 'parking') { towCost = 0; storageRate = 0; } 
+
+    const totalStorage = storageRate * days;
+    const totalSum = fineBase + towCost + totalStorage;
+
+    document.getElementById('fineRes').innerHTML = `
+        <h3 style="color:#FF4D4D;">ИТОГО ПОТЕРЬ: ${totalSum.toLocaleString('ru-RU')} ₽</h3>
+        <ul>
+            <li>Штраф ГИБДД: ${fineBase} ₽</li>
+            <li>Эвакуатор: ${towCost} ₽</li>
+            <li>Хранение (${days} дн.): ${totalStorage} ₽</li>
+        </ul>
+        <div class="ti">💡 Скидка 50% действует только на сам штраф ГИБДД в первые 20 дней. Эвакуацию оплачивать нужно полностью.</div>
+    `;
+    document.getElementById('fineRes').style.display = 'block';
+}
+</script>
+</body>
+</html>
