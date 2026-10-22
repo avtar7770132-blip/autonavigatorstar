@@ -5,8 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>АвтоШтурман · Умный помощник автовладельца</title>
 <link rel="stylesheet" href="styles.css">
-<!-- Подключаем Chart.js для графиков -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+/* Золотой градиент для заголовка */
+.gold-text {
+    background: linear-gradient(90deg, #FFD700, #FFA500, #FFD700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+}
+</style>
 </head>
 <body>
 <div class="container">
@@ -15,42 +24,47 @@
 <div class="hero-section">
     <img src="hero-auto.jpg" alt="АвтоШтурман - премиальный помощник для авто" class="hero-img">
     <div class="hero-text-overlay">
-        <h2>🚗 АвтоШтурман</h2>
-        <p>Считай расходы. Чини с умом. Экономь на сервисе.</p>
+        <!-- Убрали эмодзи 🚗, добавили класс gold-text -->
+        <h2 class="gold-text" style="font-size: 3.5rem; margin: 0; text-shadow: 0 4px 20px rgba(0,0,0,0.8);">АвтоШтурман</h2>
+        <p style="font-size: 1.3rem; margin: 15px 0 0; color: var(--accent-neon); font-weight: 600;">Считай расходы. Чини с умом. Экономь на сервисе.</p>
     </div>
 </div>
 
 <header>
-<h1>Твои автомобильные инструменты</h1>
-<p class="subtitle">Бесплатные калькуляторы стоимости владения, диагностики ошибок, износа деталей и окупаемости ГБО. Премиум-аналитика для твоего авто.</p>
+<h1 class="gold-text">Твои автомобильные инструменты</h1>
+<p class="subtitle">Бесплатные калькуляторы для автовладельцев: стоимость владения, диагностика ошибок, износ колодок и окупаемость ГБО.</p>
 </header>
 
 <div class="filters">
 <button onclick="filterCards('all')" class="filter-btn active" id="btn-all">Все</button>
 <button onclick="filterCards('calc')" class="filter-btn" id="btn-calc">🧮 Калькуляторы</button>
-<button onclick="filterCards('tool')" class="filter-btn" id="btn-tool">🔧 Диагностика</button>
-<button onclick="filterCards('blog')" class="filter-btn" id="btn-blog">📚 Экспертные статьи</button>
+<button onclick="filterCards('tool')" class="filter-btn" id="btn-tool">🔧 Инструменты</button>
+<button onclick="filterCards('blog')" class="filter-btn" id="btn-blog">📚 Экспертный блог</button>
 </div>
 
 <div class="grid-container">
-<!-- Карточки будут добавлены следующим шагом -->
+<!-- Карточка 1: TCO -->
 <div class="card fade-in-up" data-category="calc">
     <div class="card-icon">💰</div>
     <div class="card-title">Стоимость владения (TCO)</div>
-    <div class="card-desc">Узнай реальную цену твоего авто в месяц. Бензин, ТО, страховка, амортизация — всё в одном графике.</div>
-    <span class="btn-link">Рассчитать →</span>
+    <div class="card-desc">Узнай реальную цену твоего авто в месяц. Бензин, ТО, страховка, мойка, резина — всё в одном графике.</div>
+    <a href="tco-calc.html" class="btn-link">Рассчитать →</a>
 </div>
+
+<!-- Карточка 2: OBD2 -->
 <div class="card fade-in-up" data-category="tool">
     <div class="card-icon">⚠️</div>
     <div class="card-title">Декодер ошибок OBD2</div>
-    <div class="card-desc">Горит Check Engine? Введи код ошибки и узнай причину, последствия и можно ли ехать дальше.</div>
-    <span class="btn-link">Диагностировать →</span>
+    <div class="card-desc">Загорелся Check Engine? Введи код ошибки и узнай причину поломки без паники в сервисе.</div>
+    <a href="obd2-decoder.html" class="btn-link">Диагностировать →</a>
 </div>
+
+<!-- Карточка 3: Тормоза -->
 <div class="card fade-in-up" data-category="calc">
     <div class="card-icon">🛑</div>
     <div class="card-title">Износ тормозных колодок</div>
-    <div class="card-desc">Прогноз остаточного ресурса в км и дата замены. Не дай сервису обмануть тебя на преждевременной замене.</div>
-    <span class="btn-link">Проверить износ →</span>
+    <div class="card-desc">Когда менять? Точный прогноз остатка ресурса в км based on толщине и стиле вождения.</div>
+    <a href="brakes-calc.html" class="btn-link">Проверить →</a>
 </div>
 </div>
 
