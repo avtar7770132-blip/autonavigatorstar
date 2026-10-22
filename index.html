@@ -7,43 +7,26 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="stylesheet" href="styles.css">
 <style>
-/* Золотой градиент для заголовка */
-.gold-text {
-    background: linear-gradient(90deg, #FFD700, #FFA500, #FFD700);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    color: transparent;
-    display: inline-block;
-}
-/* Стиль для блока блога, чтобы он выделялся */
-.blog-highlight {
-    grid-column: span 3; /* На широких экранах занимает всю ширину */
-    background: linear-gradient(135deg, rgba(0, 229, 255, 0.1), rgba(255, 215, 0, 0.1));
-    border: 1px solid var(--accent-neon);
-    text-align: center;
-    padding: 40px;
-}
-@media(max-width: 768px) {
-    .blog-highlight { grid-column: span 1; }
-}
+.gold-text { background: linear-gradient(90deg, #FFD700, #FFA500, #FFD700); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; color: transparent; display: inline-block; }
+.blog-highlight { grid-column: span 3; background: linear-gradient(135deg, rgba(0, 229, 255, 0.1), rgba(255, 215, 0, 0.1)); border: 1px solid var(--accent-neon); text-align: center; padding: 40px; }
+@media(max-width: 768px) { .blog-highlight { grid-column: span 1; } }
 </style>
 </head>
 <body>
 <div class="container">
 
-<!-- ГЛАВНЫЙ БАННЕР С ФОТО -->
+<!-- ГЛАВНЫЙ БАННЕР -->
 <div class="hero-section">
-    <img src="hero-auto.jpg" alt="АвтоШтурман - премиальный помощник для авто" class="hero-img">
+    <img src="hero-auto.jpg" alt="АвтоШтурман" class="hero-img">
     <div class="hero-text-overlay">
-        <h2 class="gold-text" style="font-size: 3.5rem; margin: 0; text-shadow: 0 4px 20px rgba(0,0,0,0.8);">АвтоШтурман</h2>
+        <h2 class="gold-text" style="font-size: 3.5rem; margin: 0;">АвтоШтурман</h2>
         <p style="font-size: 1.3rem; margin: 15px 0 0; color: var(--accent-neon); font-weight: 600;">Считай расходы. Чини с умом. Экономь на сервисе.</p>
     </div>
 </div>
 
 <header>
 <h1 class="gold-text">Твои автомобильные инструменты</h1>
-<p class="subtitle">Бесплатные калькуляторы для автовладельцев: стоимость владения, диагностика ошибок, подбор запчастей и юридическая безопасность.</p>
+<p class="subtitle">9 бесплатных калькуляторов для полного контроля над вашим автомобилем.</p>
 </header>
 
 <div class="filters">
@@ -54,72 +37,26 @@
 </div>
 
 <div class="grid-container">
-
 <!-- 1. TCO -->
-<div class="card fade-in-up" data-category="calc">
-    <div class="card-icon">💰</div>
-    <div class="card-title">Стоимость владения (TCO)</div>
-    <div class="card-desc">Реальная цена твоего авто в месяц. Бензин, ТО, страховка, амортизация — всё в одном графике.</div>
-    <a href="tco-calc.html" class="btn-link">Рассчитать →</a>
-</div>
-
+<div class="card fade-in-up" data-category="calc"><div class="card-icon">💰</div><div class="card-title">Стоимость владения (TCO)</div><div class="card-desc">Реальная цена авто в месяц. Бензин, ТО, амортизация.</div><a href="tco-calc.html" class="btn-link">Рассчитать →</a></div>
 <!-- 2. OBD2 -->
-<div class="card fade-in-up" data-category="tool">
-    <div class="card-icon">⚠️</div>
-    <div class="card-title">Декодер ошибок OBD2</div>
-    <div class="card-desc">Check Engine горит? Введи код ошибки и узнай причину поломки без визита в сервис.</div>
-    <a href="obd2-decoder.html" class="btn-link">Диагностировать →</a>
-</div>
-
+<div class="card fade-in-up" data-category="tool"><div class="card-icon">⚠️</div><div class="card-title">Декодер ошибок OBD2</div><div class="card-desc">Что значит Check Engine? Расшифровка кодов.</div><a href="obd2-decoder.html" class="btn-link">Диагностировать →</a></div>
 <!-- 3. Тормоза -->
-<div class="card fade-in-up" data-category="calc">
-    <div class="card-icon">🛑</div>
-    <div class="card-title">Износ тормозных колодок</div>
-    <div class="card-desc">Когда менять? Прогноз остатка ресурса в км based on толщине и стиле вождения.</div>
-    <a href="brakes-calc.html" class="btn-link">Проверить →</a>
-</div>
-
+<div class="card fade-in-up" data-category="calc"><div class="card-icon">🛑</div><div class="card-title">Износ тормозных колодок</div><div class="card-desc">Прогноз остатка ресурса в км.</div><a href="brakes-calc.html" class="btn-link">Проверить →</a></div>
 <!-- 4. ГБО -->
-<div class="card fade-in-up" data-category="calc">
-    <div class="card-icon">⛽</div>
-    <div class="card-title">Окупаемость ГБО</div>
-    <div class="card-desc">Стоит ли ставить газ? Расчет экономии и срока возврата инвестиций через 2 года.</div>
-    <a href="gas-payback.html" class="btn-link">Посчитать выгоду →</a>
-</div>
-
+<div class="card fade-in-up" data-category="calc"><div class="card-icon">⛽</div><div class="card-title">Окупаемость ГБО</div><div class="card-desc">Стоит ли ставить газ? Срок возврата инвестиций.</div><a href="gas-payback.html" class="btn-link">Посчитать выгоду →</a></div>
 <!-- 5. Масло (Новый) -->
-<div class="card fade-in-up" data-category="tool">
-    <div class="card-icon">🛢️</div>
-    <div class="card-title">Подбор масла по авто</div>
-    <div class="card-desc">Выбери марку и модель. Узнай допуски производителя, вязкость и объем картера.</div>
-    <a href="oil-finder.html" class="btn-link">Найти масло →</a>
-</div>
-
+<div class="card fade-in-up" data-category="tool"><div class="card-icon">🛢️</div><div class="card-title">Подбор масла</div><div class="card-desc">Допуски производителя для вашего двигателя.</div><a href="oil-finder.html" class="btn-link">Найти масло →</a></div>
 <!-- 6. Шины (Новый) -->
-<div class="card fade-in-up" data-category="calc">
-    <div class="card-icon">🛞</div>
-    <div class="card-title">Индекс нагрузки шин</div>
-    <div class="card-desc">Проверь, подходят ли твои шины под вес автомобиля и пассажиров. Безопасность прежде всего.</div>
-    <a href="tire-checker.html" class="btn-link">Проверить шины →</a>
-</div>
-
+<div class="card fade-in-up" data-category="calc"><div class="card-icon">🛞</div><div class="card-title">Индекс нагрузки шин</div><div class="card-desc">Хватит ли прочности покрышек под вес авто?</div><a href="tire-checker.html" class="btn-link">Проверить шины →</a></div>
 <!-- 7. Штрафы (Новый) -->
-<div class="card fade-in-up" data-category="calc">
-    <div class="card-icon">👮</div>
-    <div class="card-title">Калькулятор штрафов</div>
-    <div class="card-desc">Сколько стоит нарушение + эвакуация + стоянка. Планируй бюджет на "непредвиденные расходы".</div>
-    <a href="fine-calculator.html" class="btn-link">Посчитать штраф →</a>
-</div>
+<div class="card fade-in-up" data-category="calc"><div class="card-icon">👮</div><div class="card-title">Калькулятор штрафов</div><div class="card-desc">Сколько стоит нарушение + эвакуация + стоянка.</div><a href="fine-calculator.html" class="btn-link">Посчитать штраф →</a></div>
+<!-- 8. VIN (Новый) -->
+<div class="card fade-in-up" data-category="tool"><div class="card-icon">📋</div><div class="card-title">Чек-лист покупки б/у</div><div class="card-desc">Интерактивный список проверок перед сделкой.</div><a href="vin-history.html" class="btn-link">Проверить VIN →</a></div>
+<!-- 9. Экономия топлива (Новый) -->
+<div class="card fade-in-up" data-category="calc"><div class="card-icon">📉</div><div class="card-title">Экономия топлива</div><div class="card-desc">Сравнение расходов: спокойная vs агрессивная езда.</div><a href="fuel-saver.html" class="btn-link">Рассчитать потери →</a></div>
 
-<!-- 8. VIN / История (Новый) -->
-<div class="card fade-in-up" data-category="tool">
-    <div class="card-icon">📋</div>
-    <div class="card-title">Проверка истории авто</div>
-    <div class="card-desc">Чек-лист документов и ссылки на бесплатные базы ГИБДД/ФССП перед покупкой б/у машины.</div>
-    <a href="vin-history.html" class="btn-link">Проверить VIN →</a>
-</div>
-
-<!-- 9. БЛОГ (Выделенный блок) -->
+<!-- БЛОГ -->
 <a href="blog/index.html" class="card fade-in-up blog-highlight" data-category="blog" style="text-decoration:none; color:#fff;">
     <div class="card-icon" style="font-size:3rem;">📖</div>
     <div class="card-title" style="font-size:1.8rem; margin-bottom:10px;">Экспертный блог АвтоШтурмана</div>
@@ -128,12 +65,10 @@
         <strong>Читать статьи →</strong>
     </div>
 </a>
-
 </div>
 
 <footer>© 2026 АвтоШтурман · Все расчеты справочные. Безопасной дороги!</footer>
 </div>
-
 <script>
 function filterCards(category){
 const cards=document.querySelectorAll('.card');
