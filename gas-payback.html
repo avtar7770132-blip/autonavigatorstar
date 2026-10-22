@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Окупаемость ГБО — АвтоШтурман</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="styles.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+.chart-container-auto { height: 300px; width: 100%; margin-top: 20px; }
+.payback-time { font-size: 2.5rem; color: var(--success); font-weight: bold; text-align: center; margin: 10px 0; }
+.savings-yearly { font-size: 1.5rem; color: #fff; text-align: center; }
+</style>
+</head>
+<body>
+<div class="container">
+<header style="margin-bottom:20px"><a href="index.html" style="color:var(--accent-neon);font-weight:bold;text-decoration:none">← На главную</a></header>
+<h1 class="gold-text">⛽ Окупаемость ГБО (Газ)</h1>
+<p class="subtitle">Стоит ли ставить газ? Расчет экономии и срока возврата инвестиций.</p>
+
+<!-- КАРТИНКА -->
+<img src="gas.jpg" alt="Газовая заправка автомобиля ночью" style="width:100%; height:250px; object-fit:cover; border-radius:16px; margin-bottom:30px;">
+
+<div class="calc-wrapper">
+    <div class="grid-inputs">
+        <div class="input-group">
+            <label>Стоимость установки ГБО (₽)</label>
+            <input type="number" id="gboCost" value="50000">
+        </div>
+        <div class="input-group">
+            <label>Цена бензина АИ-95 (₽/л)</label>
+            <input type="number" id="petrolPrice" value="55">
+        </div>
+        <div class="input-group">
+            <label>Цена газа ПРОПАН (₽/л)</label>
+            <input type="number" id="lpgPrice" value="28">
+        </div>
+        <div class="input-group">
+            <label>Расход бензина (л/100км)</label>
+            <input type="number" id="petrolCons" value="10">
+        </div>
+        <div class="input-group">
+            <label>Расход газа (+~20% к бензину)</label>
+            <input type="number" id="lpgCons" value="12">
+        </div>
+        <div class="input-group">
+            <label>Ежемесячный пробег (км)</label>
+            <input type="number" id="monthlyKm" value="1500">
+        </div>
+    </div>
+
+    <button onclick="calculateGasPayback()" class="btn-link" style="width:100%; margin-top:20px;">Рассчитать окупаемость</button>
+
+    <div id="gasResult" class="result-box show" style="display:none;">
+        <div class="payback-time" id="monthsToPayback">0 мес.</div>
+        <div style="text-align:center; color:var(--text-muted); margin-bottom:10px;">Срок возврата вложений</div>
+        
+        <div class="savings-yearly" id="yearlySavings">Экономия: 0 ₽/год</div>
+        
+        <div class="chart-container-auto">
+            <canvas id="gasChart"></canvas>
+        </div>
+        
+        <div class="ti" style="margin-top:15px; font-size:0.9rem; color:var(--text-muted); text-align:center;">
+            💡 График показывает накопленную экономию. Когда линия пересекает горизонтальную красную черту (стоимость оборудования) — вы вышли в плюс.
+        </div>
+    </div>
+</div>
+
+<footer>© 2026 АвтоШтурман · Все расчеты справочные. Безопасной дороги!</footer>
+</div>
+
+<script>
+let gasChartInstance = null;
+
+function calculateGasPayback() {
+    const gboCost = parseFloat(document.getElementById('gboCost').value);
+    const pPrice = parseFloat(document.getElementById('petrolPrice').value);
+    const lPrice = parseFloat(document.getElementById('lpgPrice').value);
+    const pCons = parseFloat(document.getElementById('petrolCons').value);
+    const lCons = parseFloat(document.getElementById('lpgCons').value);
+    const mKm = parseFloat(document.getElementById('monthlyKm').value);
+
+    // Расходы в месяц
+    const petrolMonthlyCost = (mKm / 100) * pCons * pPrice;
+    const gasMonthlyCost = (mKm / 100) * lCons * lPrice;
+    
+    const monthlySaving = petrolMonthlyCost - gasMonthlyCost;
+    
+    if (monthlySaving <= 0) {
+        alert("Газ не выгоден при таких ценах и расходе!");
+        return;
+    }
+
+    const monthsToBreakEven = Math.ceil(gboCost / monthlySaving);
+    const yearlySaving = monthlySaving * 12;
+
+    // Обновление текста
+    document.getElementById('gasResult').style.display = 'block';
+    document.getElementById('monthsToPayback').innerText = monthsToBreakEven + " мес.";
+    document.getElementById('yearlySavings').innerText = "Экономия: " + yearlySaving.toLocaleString('ru-RU') + " ₽/год";
+
+    // Данные для графика (накопленная экономия по месяцам)
+    const labels = [];
+    const savingsData = [];
+    const investmentLine = []; // Горизонтальная линия стоимости ГБО
+    
+    for(let i=1; i<=24; i++) { // Строим на 2 года вперед
+        labels.push(i + " мес.");
+        savingsData.push(monthlySaving * i);
+        investmentLine.push(gboCost);
+    }
+
+    renderGasChart(labels, savingsData, investmentLine);
+}
+
+function renderGasChart(labels, savings, invest) {
+    const ctx = document.getElementById('gasChart').getContext('2d');
+    if (gasChartInstance) gasChartInstance.destroy();
+
+    gasChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Накопленная экономия',
+                    data: savings,
+                    borderColor: '#00FF9D', // Зеленый
+                    backgroundColor: 'rgba(0, 255, 157, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.1
+                },
+                {
+                    label: 'Стоимость оборудования',
+                    data: invest,
+                    borderColor: '#FF4D4D', // Красный
+                    borderWidth: 2,
+                    borderDash: [5, 5], // Пунктир
+                    fill: false
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { labels: { color: '#E2E8F0' } },
+                tooltip: { mode: 'index', intersect: false }
+            },
+            scales: {
+                y: { 
+                    ticks: { color: '#94A3B8', callback: val => val/1000 + 'k ₽' },
+                    grid: { color: 'rgba(255,255,255,0.05)' }
+                },
+                x: { ticks: { color: '#E2E8F0' }, grid: { display: false } }
+            }
+        }
+    });
+}
+</script>
+</body>
+</html>
