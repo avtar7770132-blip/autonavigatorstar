@@ -18,8 +18,9 @@
 <header style="margin-bottom:20px"><a href="index.html" style="color:var(--accent-neon);font-weight:bold;text-decoration:none">← На главную</a></header>
 <h1 class="gold-text">📋 Чек-лист проверки б/у авто</h1>
 <p class="subtitle">Не покупайте кота в мешке. Проверьте историю по этим пунктам.</p>
-<!-- ИСПРАВЛЕНО ИМЯ ФАЙЛА КАРТИНКИ -->
-<img src="vin-docs.jpg" alt="Документы и ключи" style="width:100%; height:250px; object-fit:cover; border-radius:16px; margin-bottom:30px;">
+
+<!-- КАРТИНКА vin-docs.jpg -->
+<img src="vin-docs.jpg" alt="Документы и ключи" onerror="this.src='https://via.placeholder.com/800x250/1A1D24/00E5FF?text=No+Image'" style="width:100%; height:250px; object-fit:cover; border-radius:16px; margin-bottom:30px;">
 
 <div class="calc-wrapper">
     <div class="checklist-item" onclick="toggleCheck(this)">
@@ -44,14 +45,6 @@
             <strong>3. Залоги и кредиты (ФССП)</strong><br>
             <span style="font-size:0.9rem; color:var(--text-muted);">Банк данных исполнительных производств.</span>
             <a href="https://fssp.gov.ru/" target="_blank" class="link-btn">Проверить долги собственника →</a>
-        </div>
-    </div>
-    <div class="checklist-item" onclick="toggleCheck(this)">
-        <div class="checkbox-custom"></div>
-        <div>
-            <strong>4. Пробег и ДТП (Коммерческие базы)</strong><br>
-            <span style="font-size:0.9rem; color:var(--text-muted);">Автотека, ПроАвто, CarPrice (обычно платно, но есть триал).</span>
-            <a href="#" class="link-btn" style="opacity:0.5; pointer-events:none;">Сервис недоступен / Платно</a>
         </div>
     </div>
     
