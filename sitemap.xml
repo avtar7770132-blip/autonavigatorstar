@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+   <!-- ГЛАВНАЯ -->
+   <url>
+      <loc>https://avtar7770132-blip.github.io/autonavigatorstar/index.html</loc>
+      <lastmod>2026-10-23</lastmod>
+      <changefreq>daily</changefreq>
+      <priority>1.0</priority>
+   </url>
+   
+   <!-- КАЛЬКУЛЯТОРЫ (9 шт) -->
+   <url><loc>https://avtar7770132-blip.github.io/autonavigatorstar/tco-calc.html</loc><lastmod>2026-10-23</lastmod><priority>0.8</priority></url>
+   <url><loc>https://avtar7770132-blip.github.io/autonavigatorstar/obd2-decoder.html</loc><lastmod>2026-10-23</lastmod><priority>0.8</priority></url>
+   <url><loc>https://avtar7770132-blip.github.io/autonavigatorstar/brakes-calc.html</loc><lastmod>2026-10-23</lastmod><priority>0.8</priority></url>
+   <url><loc>https://avtar7770132-blip.github.io/autonavigatorstar/gas-payback.html</loc><lastmod>2026-10-23</lastmod><priority>0.8</priority></url>
+   <url><loc>https://avtar7770132-blip.github.io/autonavigatorstar/oil-finder.html</loc><lastmod>2026-10-23</lastmod><priority>0.8</priority></url>
+   <url><loc>https://avtar7770132-blip.github.io/autonavigatorstar/tire-checker.html</loc><lastmod>2026-10-23</lastmod><priority>0.8</priority></url>
+   <url><loc>https://avtar7770132-blip.github.io/autonavigatorstar/fine-calculator.html</loc><lastmod>2026-10-23</lastmod><priority>0.8</priority></url>
+   <url><loc>https://avtar7770132-blip.github.io/autonavigatorstar/vin-history.html</loc><lastmod>2026-10-23</lastmod><priority>0.8</priority></url>
+   <url><loc>https://avtar7770132-blip.github.io/autonavigatorstar/fuel-saver.html</loc><lastmod>2026-10-23</lastmod><priority>0.8</priority></url>
+
+   <!-- БЛОГ (INDEX) -->
+   <url><loc>https://avtar7770132-blip.github.io/autonavigatorstar/blog/index.html</loc><lastmod>2026-10-23</lastmod><priority>0.7</priority></url>
+
+   <!-- СТАТЬИ БЛОГА (12 шт) -->
+   <url><loc>https://avtar7770132-blip.github.io/autonavigatorstar/blog/buy-used-car.html</loc><lastmod>2026-10-23</lastmod><priority>0.6</priority></url>
+   <url><loc>https://avtar7770132-blip.github.io/autonavigatorstar/blog/engine-noise-diagnosis.html</loc><lastmod>2026-10-23</lastmod><priority>0.6</priority></url>
+   <url><loc>https://avtar7770132-blip.github.io/autonavigatorstar/blog/winter-tips-driving.html</loc><lastmod>2026-10-23</lastmod><priority>0.6</priority></url>
+   <url><loc>https://avtar7770132-blip.github.io/autonavigatorstar/blog/gas-vs-petrol-truth.html</loc><lastmod>2026-10-23</lastmod><priority>0.6</priority></url>
+   <url><loc>https://avtar7770132-blip.github.io/autonavigatorstar/blog/maintenance-intervals-guide.html</loc><lastmod>2026-10-23</lastmod><priority>0.6</priority></url>
+   <url><loc>https://avtar7770132-blip.github.io/autonavigatorstar/blog/avoiding-fines-guide.html</loc><lastmod>2026-10-23</lastmod><priority>0.6</priority></url>
+   <url><loc>https://avtar7770132-blip.github.io/autonavigatorstar/blog/smooth-driving-economy.html</loc><lastmod>2026-10-23</lastmod><priority>0.6</priority></url>
+   <url><loc>https://avtar7770132-blip.github.io/autonavigatorstar/blog/brake-system-explained.html</loc><lastmod>2026-10-23</lastmod><priority>0.6</priority></url>
+   <url><loc>https://avtar7770132-blip.github.io/autonavigatorstar/blog/total-cost-of-ownership-article.html</loc><lastmod>2026-10-23</lastmod><priority>0.6</priority></url>
+   <url><loc>https://avtar7770132-blip.github.io/autonavigatorstar/blog/insurance-osago-kasko.html</loc><lastmod>2026-10-23</lastmod><priority>0.6</priority></url>
+   <url><loc>https://avtar7770132-blip.github.io/autonavigatorstar/blog/diy-car-wash-tips.html</loc><lastmod>2026-10-23</lastmod><priority>0.6</priority></url>
+   <url><loc>https://avtar7770132-blip.github.io/autonavigatorstar/blog/first-car-choice.html</loc><lastmod>2026-10-23</lastmod><priority>0.6</priority></url>
+</urlset>
