@@ -3,232 +3,145 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Стоимость владения авто (TCO) — АвтоШтурман</title>
+<title>Калькулятор стоимости владения — АвтоШтурман</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="stylesheet" href="styles.css">
-<!-- Подключаем Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "z26px2msaf");
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Калькулятор TCO АвтоШтурман",
+  "applicationCategory": "AutomotiveApplication",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "RUB" },
+  "featureList": "Расчет полной стоимости владения автомобилем"
+}
+</script>
 <style>
-/* Стили для блока с картинкой */
-.article-hero-img {
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
-    border-radius: 16px;
-    margin-bottom: 30px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-}
-.chart-wrapper { 
-    margin-top: 30px; 
-    background: rgba(0,0,0,0.2); 
-    padding: 20px; 
+.result-box-tco { 
+    background: rgba(255, 255, 255, 0.9); 
+    border-left: 5px solid #FF9800; 
+    padding: 25px; 
     border-radius: 12px; 
-    border: 1px solid var(--border-glass);
+    margin-top: 30px; 
+    display: none; 
+    box-shadow: 0 4px 15px rgba(255, 152, 0, 0.15);
 }
-.big-number { font-size: 2.5rem; color: var(--accent-neon); font-weight: bold; text-align: center; margin: 10px 0; }
-.label-small { color: var(--text-muted); font-size: 0.9rem; text-align: center; }
-.grid-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-.input-group label { display: block; margin-bottom: 5px; font-size: 0.9rem; color: var(--text-muted); }
-.input-group input { width: 100%; padding: 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); color: #fff; border-radius: 6px; }
-.result-summary { display: flex; justify-content: space-around; margin-top: 20px; flex-wrap: wrap; gap: 10px; }
-.summary-item { text-align: center; }
-.summary-value { font-size: 1.2rem; font-weight: bold; color: #fff; }
-.summary-label { font-size: 0.8rem; color: var(--text-muted); }
+.tco-value { font-size: 2.5rem; font-weight: 800; color: #E65100; text-align: center; margin: 10px 0; }
+.tco-desc { text-align: center; font-size: 1.1rem; color: var(--text-muted); margin-bottom: 20px; }
+.partner-block { 
+    text-align: center; 
+    margin-top: 25px; 
+    padding: 20px; 
+    background: rgba(255, 152, 0, 0.05); 
+    border-radius: 12px; 
+    border: 1px dashed #FF9800;
+}
+.partner-btn {
+    display: inline-block;
+    background: #FF9800;
+    color: white;
+    text-decoration: none;
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: all 0.3s;
+    box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
+}
+.partner-btn:hover { background: #F57C00; transform: scale(1.05); }
+.ad-mark { font-size: 0.7rem; color: #888; margin-top: 8px; display: block; line-height: 1.4; }
+.input-styled { width: 100%; padding: 12px; border: 1px solid var(--border-glass); border-radius: 8px; background: rgba(255,255,255,0.9); font-size: 1rem; margin-bottom: 20px; }
+.breakdown-list { list-style: none; padding: 0; margin: 20px 0; }
+.breakdown-list li { padding: 10px 0; border-bottom: 1px dashed #CBD5E0; display: flex; justify-content: space-between; font-size: 1rem; }
+.breakdown-list li span:last-child { font-weight: bold; color: var(--text-dark); }
 </style>
 </head>
 <body>
 <div class="container">
-<header style="margin-bottom:20px"><a href="index.html" style="color:var(--accent-neon);font-weight:bold;text-decoration:none">← На главную</a></header>
-<h1 class="gold-text">💰 Стоимость владения авто (TCO)</h1>
-<p class="subtitle">Узнай, сколько реально стоит твоя машина в месяц и за один километр.</p>
+<header style="margin-bottom:20px"><a href="index.html" style="color:#FF9800;font-weight:bold;text-decoration:none">← На главную</a></header>
+<h1 style="background: linear-gradient(90deg, var(--text-dark), #FF9800); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">🚗 Калькулятор стоимости владения</h1>
+<p class="subtitle">Узнай реальные расходы на автомобиль за год.</p>
 
-<!-- КАРТИНКА ДЛЯ КОНТЕКСТА -->
-<img src="hero-auto.jpg" alt="Автомобиль на ночной дороге" class="article-hero-img">
+<img src="tco.jpg" alt="Стоимость владения авто" style="width:100%; height:250px; object-fit:cover; border-radius:16px; margin-bottom:30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
 
-<div class="calc-wrapper">
-    <div class="grid-inputs">
-        <div class="input-group">
-            <label>Цена автомобиля (₽)</label>
-            <input type="number" id="carPrice" value="1500000">
-        </div>
-        <div class="input-group">
-            <label>Пробег в год (км)</label>
-            <input type="number" id="annualKm" value="15000">
-        </div>
-        <div class="input-group">
-            <label>Расход топлива (л/100км)</label>
-            <input type="number" id="fuelConsumption" value="8" step="0.1">
-        </div>
-        <div class="input-group">
-            <label>Цена бензина (₽/л)</label>
-            <input type="number" id="fuelPrice" value="55">
-        </div>
-        <div class="input-group">
-            <label>ТО и ремонт в год (₽)</label>
-            <input type="number" id="maintenanceCost" value="20000">
-        </div>
-        <div class="input-group">
-            <label>Страховка КАСКО/ОСАГО (₽/год)</label>
-            <input type="number" id="insuranceCost" value="15000">
-        </div>
-        <div class="input-group">
-            <label>Мойка, парковка, шины (₽/год)</label>
-            <input type="number" id="otherCosts" value="10000">
-        </div>
-        <div class="input-group">
-            <label>Потеря стоимости в год (%)</label>
-            <input type="number" id="depreciationRate" value="10" step="0.1">
-        </div>
+<div class="card" style="max-width:600px; margin:0 auto;">
+    <div class="form-group" style="margin-bottom:20px;">
+        <label style="display:block; margin-bottom:8px; font-weight:600; color:var(--text-dark);">Пробег в год (км)</label>
+        <input type="number" id="mileage" placeholder="Например: 15000" class="input-styled">
+    </div>
+    
+    <div class="form-group" style="margin-bottom:20px;">
+        <label style="display:block; margin-bottom:8px; font-weight:600; color:var(--text-dark);">Расход топлива (л/100км)</label>
+        <input type="number" id="consumption" placeholder="Например: 8" step="0.1" class="input-styled">
     </div>
 
-    <button onclick="calculateTCO()" class="btn-link" style="width:100%; margin-top:20px;">Рассчитать расходы</button>
+    <div class="form-group" style="margin-bottom:20px;">
+        <label style="display:block; margin-bottom:8px; font-weight:600; color:var(--text-dark);">Цена бензина (₽/л)</label>
+        <input type="number" id="fuelPrice" placeholder="Например: 55" class="input-styled">
+    </div>
 
-    <!-- Результаты -->
-    <div id="resultArea" class="result-box show" style="display:none;">
-        <div class="big-number" id="monthlyTotal">0 ₽/мес</div>
-        <div class="label-small">Средние ежемесячные расходы на автомобиль</div>
+    <div class="form-group" style="margin-bottom:20px;">
+        <label style="display:block; margin-bottom:8px; font-weight:600; color:var(--text-dark);">Страховка + налоги (₽/год)</label>
+        <input type="number" id="insurance" placeholder="Например: 30000" class="input-styled">
+    </div>
+
+    <button onclick="calculateTCO()" class="btn-link" style="width:100%; border:none; cursor:pointer; background:#FF9800;">Рассчитать стоимость</button>
+
+    <!-- РЕЗУЛЬТАТЫ -->
+    <div id="resultArea" class="result-box-tco">
+        <div class="tco-value" id="totalCost">0 ₽</div>
+        <div class="tco-desc">Общие расходы за год</div>
         
-        <div class="result-summary">
-            <div class="summary-item">
-                <div class="summary-value" id="costPerKm">0 ₽</div>
-                <div class="summary-label">За 1 км пути</div>
-            </div>
-            <div class="summary-item">
-                <div class="summary-value" id="yearlyTotal">0 ₽</div>
-                <div class="summary-label">Всего за год</div>
-            </div>
-            <div class="summary-item">
-                <div class="summary-value" id="fuelShare">0%</div>
-                <div class="summary-label">Доля топлива</div>
-            </div>
-        </div>
+        <ul class="breakdown-list">
+            <li><span>Топливо:</span> <span id="fuelCost">0 ₽</span></li>
+            <li><span>Страховка и налоги:</span> <span id="insCost">0 ₽</span></li>
+            <li><span>ТО и шины (ориентировочно):</span> <span id="maintCost">0 ₽</span></li>
+        </ul>
 
-        <!-- ГРАФИК ЛИНЕЙНЫЙ -->
-        <div class="chart-wrapper">
-            <canvas id="tcoChart"></canvas>
+        <!-- ПАРТНЁРСКАЯ ССЫЛКА KOLESO.RU -->
+        <div class="partner-block">
+            <div style="font-weight:bold; color:#E65100; margin-bottom:10px; font-size:1.1rem;">Экономь на шинах без потери качества</div>
+            <a href="https://ru.i05o.xyz/6adcd7cedc29e?erid=2SDnjdYS6Xi" target="_blank" rel="nofollow noopener" class="partner-btn">Подобрать шины на Koleso.ru →</a>
+            <span class="ad-mark">Реклама. Рекламодатель ООО "САМ - МБ", ИНН 75001048893. Сайт https://koleso.ru<br>erid: 2SDnjdYS6Xi</span>
         </div>
-        <div class="ti" style="margin-top:15px; font-size:0.9rem; color:var(--text-muted); text-align:center;">
-            💡 Совет: Линия показывает структуру ваших годовых затрат. Если сектор "Амортизация" слишком велик, рассмотрите продажу авто до начала резкого падения цены.
+        
+        <div style="margin-top:20px; font-size:0.9rem; color:var(--text-muted); text-align:center; line-height:1.5;">
+             💡 <strong>Совет:</strong> Сезонная замена шин входит в обязательное ТО. Выбирай резину по сезону заранее — цены растут к пику спроса.
         </div>
     </div>
 </div>
 
-<footer>© 2026 АвтоШтурман · Все расчеты справочные. Безопасной дороги!</footer>
+<footer>© 2026 АвтоШтурман · Информация справочная.</footer>
 </div>
 
 <script>
-let myChart = null;
-
 function calculateTCO() {
-    // Получаем данные из полей
-    const carPrice = parseFloat(document.getElementById('carPrice').value) || 0;
-    const annualKm = parseFloat(document.getElementById('annualKm').value) || 0;
-    const fuelCons = parseFloat(document.getElementById('fuelConsumption').value) || 0;
-    const fuelPrice = parseFloat(document.getElementById('fuelPrice').value) || 0;
-    const maintenance = parseFloat(document.getElementById('maintenanceCost').value) || 0;
-    const insurance = parseFloat(document.getElementById('insuranceCost').value) || 0;
-    const other = parseFloat(document.getElementById('otherCosts').value) || 0;
-    const depreciationRate = parseFloat(document.getElementById('depreciationRate').value) || 0;
-
-    if (carPrice === 0 || annualKm === 0) return alert("Введите цену авто и пробег");
-
-    // 1. Расчет годовых затрат
-    const fuelYearly = (annualKm / 100) * fuelCons * fuelPrice;
-    const depreciationYearly = carPrice * (depreciationRate / 100);
+    const mileage = parseFloat(document.getElementById('mileage').value);
+    const consumption = parseFloat(document.getElementById('consumption').value);
+    const fuelPrice = parseFloat(document.getElementById('fuelPrice').value);
+    const insurance = parseFloat(document.getElementById('insurance').value);
     
-    const totalYearly = fuelYearly + maintenance + insurance + other + depreciationYearly;
-    const monthlyAvg = totalYearly / 12;
-    const costPerKm = annualKm > 0 ? totalYearly / annualKm : 0;
-    const fuelPercentage = totalYearly > 0 ? Math.round((fuelYearly / totalYearly) * 100) : 0;
-
-    // Обновляем интерфейс
+    if (!mileage || !consumption || !fuelPrice || !insurance) return alert("Заполните все поля");
+    
+    const fuelLiters = (mileage * consumption / 100);
+    const fuelTotal = Math.round(fuelLiters * fuelPrice);
+    const maintenance = Math.round(mileage * 1.5); // Ориентировочная стоимость ТО и шин
+    
+    const total = fuelTotal + insurance + maintenance;
+    
     document.getElementById('resultArea').style.display = 'block';
-    document.getElementById('monthlyTotal').innerText = formatMoney(monthlyAvg) + " ₽/мес";
-    document.getElementById('costPerKm').innerText = costPerKm.toFixed(2) + " ₽";
-    document.getElementById('yearlyTotal').innerText = formatMoney(totalYearly) + " ₽";
-    document.getElementById('fuelShare').innerText = fuelPercentage + "%";
-
-    // Строим новый тип графика
-    renderLineChart(fuelYearly, maintenance, insurance, other, depreciationYearly);
-}
-
-function formatMoney(num) {
-    return num.toLocaleString('ru-RU', { maximumFractionDigits: 0 });
-}
-
-function renderLineChart(fuel, maint, ins, other, depr) {
-    const ctx = document.getElementById('tcoChart').getContext('2d');
-    
-    // Удаляем старый график, если он есть
-    if (myChart) {
-        myChart.destroy();
-    }
-
-    // Данные для оси X (категории) и Y (значения)
-    const labels = ['Топливо', 'ТО/Ремонт', 'Страховка', 'Прочее', 'Амортизация'];
-    const dataValues = [fuel, maint, ins, other, depr];
-
-    myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Годовые расходы (₽)',
-                data: dataValues,
-                borderColor: '#00E5FF', // Неоновый голубой
-                backgroundColor: 'rgba(0, 229, 255, 0.1)', // Прозрачная заливка под линией
-                borderWidth: 3,
-                pointBackgroundColor: '#FFD700', // Золотые точки
-                pointBorderColor: '#1A1D24',
-                pointRadius: 6,
-                pointHoverRadius: 8,
-                fill: true,
-                tension: 0.4 // Плавность линии
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false }, // Легенда не нужна, так как подписи на оси X
-                tooltip: {
-                    mode: 'index',
-                    intersect: false,
-                    backgroundColor: 'rgba(30, 34, 45, 0.9)',
-                    titleColor: '#fff',
-                    bodyColor: '#00E5FF',
-                    borderColor: '#00E5FF',
-                    borderWidth: 1,
-                    callbacks: {
-                        label: function(context) {
-                            let label = context.dataset.label || '';
-                            if (label) { label += ': '; }
-                            if (context.parsed.y !== null) {
-                                label += new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB' }).format(context.parsed.y);
-                            }
-                            return label;
-                        }
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: { color: 'rgba(255,255,255,0.05)' },
-                    ticks: { 
-                        color: '#94A3B8',
-                        callback: function(value) {
-                            return value / 1000 + 'k ₽'; // Укорачиваем числа для красоты
-                        }
-                    }
-                },
-                x: {
-                    grid: { display: false },
-                    ticks: { color: '#E2E8F0', font: { weight: 'bold' } }
-                }
-            }
-        }
-    });
+    document.getElementById('totalCost').innerText = total.toLocaleString('ru-RU') + " ₽";
+    document.getElementById('fuelCost').innerText = fuelTotal.toLocaleString('ru-RU') + " ₽";
+    document.getElementById('insCost').innerText = insurance.toLocaleString('ru-RU') + " ₽";
+    document.getElementById('maintCost').innerText = maintenance.toLocaleString('ru-RU') + " ₽";
 }
 </script>
 </body>
