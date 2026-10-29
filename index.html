@@ -40,23 +40,6 @@
         align-items: center;
         justify-content: space-between;
     }
-    .ad-block-side {
-        background: #1e293b;
-        border: 1px solid #334155;
-        border-radius: 12px;
-        padding: 20px;
-        text-align: center;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        transition: transform 0.3s, box-shadow 0.3s;
-    }
-    .ad-block-side:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2);
-        border-color: #3b82f6;
-    }
     .btn-buy-red {
         display: inline-block;
         background: #ef4444;
@@ -85,6 +68,28 @@
         color: #cbd5e1;
     }
     .features-list li::before { content: '• '; color: #3b82f6; }
+    
+    /* Стилизация карточки INTEGO внутри общей сетки */
+    .intego-card {
+        background: #1e293b !important;
+        border: 1px solid #334155 !important;
+        padding: 20px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        height: 100%;
+    }
+    .intego-card img {
+        width: 100%;
+        height: 140px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 15px;
+    }
+    @media (max-width: 768px) {
+        .ad-block-top { flex-direction: column; text-align: center; }
+        .features-list { text-align: center; }
+    }
 </style>
 </head>
 <body>
@@ -123,7 +128,7 @@
         <a href="https://tkprm.ru/QsZGoX?erid=Y1jgkD6uB6jK1phqkTLTbNKYTzyw" target="_blank" rel="nofollow noopener" class="btn-buy-red">Купить на Ozon →</a>
     </div>
     <div style="flex-shrink: 0;">
-        <!-- Используем локальную картинку или заглушку, так как прямые ссылки Ozon могут блокироваться -->
+        <!-- Используем локальную картинку или заглушку -->
         <img src="oil.jpg" alt="AutoCorr ведро" style="width: 150px; height: 150px; object-fit: cover; border-radius: 12px; border: 2px solid #334155;">
     </div>
     <div style="font-size: 0.65rem; color: #64748b; width: 100%; text-align: left; margin-top: 10px; border-top: 1px solid #334155; padding-top: 5px;">
@@ -204,40 +209,39 @@
     <a href="first-car-choice.html" class="btn-link">Читать →</a>
 </div>
 
-<!-- 10. БЛОГ + НОВАЯ ПАРТНЁРКА INTEGO (ВМЕСТЕ В ОДНОМ РЯДУ) -->
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
-    
-    <!-- Старый блок Блога -->
-    <a href="blog/index.html" class="card fade-in-up blog-highlight" style="grid-column: span 1;">
-        <div class="card-icon" style="font-size:3rem;">📖</div>
-        <div class="card-title" style="font-size:1.8rem; margin-bottom:10px;">Блог АвтоШтурмана</div>
-        <div class="card-desc" style="font-size:1.1rem; max-width:600px; margin:0 auto;">
-            Статьи про обслуживание, экономию и безопасность. 
-            <strong>Читать статьи →</strong>
-        </div>
-    </a>
+<!-- ========================================== -->
+<!-- ФИНАЛЬНЫЙ РЯД: БЛОГ + РЕКЛАМА (В ОДНОЙ СЕТКЕ) -->
+<!-- ========================================== -->
 
-    <!-- Новая карточка товара INTEGO -->
-    <div class="ad-block-side">
-        <div>
-            <img src="https://ir-3.ozone.ru/s3/multimedia-1-q/wc1000/7777777777.jpg" onerror="this.src='hero-auto.jpg'" alt="Intego Registrator" style="width: 100%; height: 140px; object-fit: cover; border-radius: 8px; margin-bottom: 15px;">
-            <h3 style="color: white; font-size: 1.2rem; margin: 0 0 10px 0;">INTEGO VX-1500SW</h3>
-            <p style="color: #94a3b8; font-size: 0.9rem; line-height: 1.4; margin: 0;">
-                Видеорегистратор 2K + Сигнатурный антирадар. Wi-Fi, GPS-информер. Спасет от штрафов и докажет правоту в суде.
-            </p>
-        </div>
-        <div>
-            <span class="price-tag">20 932 ₽</span>
-            <a href="https://tkprm.ru/Q2a8a?erid=Y1jgkD6uB6jK1phqkTLTbNKY8BVg" target="_blank" rel="nofollow noopener" class="btn-buy-red" style="width: 100%;">Купить со скидкой →</a>
-            <div style="font-size: 0.6rem; color: #64748b; margin-top: 8px; text-align: left;">
-                Реклама. ИП Зацепилин В.А., ИНН 504717326173<br>erid Y1jgkD6uB6jK1phqkTLTbNKY8BVg
-            </div>
+<!-- ЛЕВАЯ КОЛОНКА: БЛОГ -->
+<a href="blog/index.html" class="card fade-in-up blog-highlight" style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 30px; min-height: 250px;">
+    <div class="card-icon" style="font-size:3rem; margin-bottom:15px;">📖</div>
+    <div class="card-title" style="font-size:1.8rem; margin-bottom:10px; color: #fff;">Блог АвтоШтурмана</div>
+    <div class="card-desc" style="font-size:1.1rem; max-width:600px; margin:0 auto; color:#cbd5e1;">
+        Статьи про обслуживание, экономию и безопасность. 
+        <strong style="color:#a855f7; display:block; margin-top:10px;">Читать статьи →</strong>
+    </div>
+</a>
+
+<!-- ПРАВАЯ КОЛОНКА: РЕКЛАМА INTEGO -->
+<div class="card fade-in-up intego-card">
+    <div>
+        <img src="hero-auto.jpg" onerror="this.src='https://ir-3.ozone.ru/s3/multimedia-1-q/wc1000/7777777777.jpg'" alt="Intego Registrator">
+        <h3 style="color: white; font-size: 1.2rem; margin: 0 0 10px 0;">INTEGO VX-1500SW</h3>
+        <p style="color: #94a3b8; font-size: 0.9rem; line-height: 1.4; margin: 0;">
+            Видеорегистратор 2K + Сигнатурный антирадар. Wi-Fi, GPS-информер. Спасет от штрафов и докажет правоту в суде.
+        </p>
+    </div>
+    <div>
+        <span class="price-tag">20 932 ₽</span>
+        <a href="https://tkprm.ru/Q2a8a?erid=Y1jgkD6uB6jK1phqkTLTbNKY8BVg" target="_blank" rel="nofollow noopener" class="btn-buy-red" style="width: 100%; box-sizing: border-box; text-align: center;">Купить со скидкой →</a>
+        <div style="font-size: 0.6rem; color: #64748b; margin-top: 8px; text-align: left; line-height: 1.2;">
+            Реклама. ИП Зацепилин В.А., ИНН 504717326173<br>erid Y1jgkD6uB6jK1phqkTLTbNKY8BVg
         </div>
     </div>
-
 </div>
 
-</div>
+</div> <!-- Конец grid-container -->
 
 <footer>© 2026 АвтоШтурман · Информация справочная.</footer>
 </div>
